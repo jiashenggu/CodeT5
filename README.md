@@ -245,3 +245,4 @@ If you want to fine-tune on your dataset, you can add your own task and sub_task
 
 Please create a GitHub issue if you have any questions, suggestions, requests or bug-reports. We welcome PRs!
 
+python run_exp.py --model_tag codet5_small --task concode --sub_task none

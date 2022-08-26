@@ -53,7 +53,7 @@ def get_args_by_task_model(task, sub_task, model_tag):
         # [TOKENIZE] avg src len: 213, avg trg len: 33, max src len: 2246, max trg len: 264
         src_len = 320
         trg_len = 150
-        epoch = 30
+        epoch = 100
         patience = 3
     elif task == 'defect':
         # Read 21854 examples, avg src len: 187, avg trg len: 1, max src len: 12195, max trg len: 1
@@ -71,7 +71,8 @@ def get_args_by_task_model(task, sub_task, model_tag):
         patience = 2
 
     if 'codet5_small' in model_tag:
-        bs = 32
+        # bs = 32
+        bs = 1
         if task == 'summarize' or task == 'translate' or (task == 'refine' and sub_task == 'small'):
             bs = 64
         elif task == 'clone':

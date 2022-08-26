@@ -171,10 +171,13 @@ def load_and_cache_multi_gen_data(args, pool, tokenizer, split_tag, only_src=Fal
 
 def get_filenames(data_root, task, sub_task, split=''):
     if task == 'concode':
-        data_dir = '{}/{}'.format(data_root, task)
+        # data_dir = '{}/{}'.format(data_root, task)
+        data_dir = '{}/{}'.format(data_root, 'Flight')
         train_fn = '{}/train.json'.format(data_dir)
-        dev_fn = '{}/dev.json'.format(data_dir)
-        test_fn = '{}/test.json'.format(data_dir)
+        # dev_fn = '{}/dev.json'.format(data_dir)
+        # test_fn = '{}/test.json'.format(data_dir)
+        dev_fn = '{}/dev_origin.json'.format(data_dir)
+        test_fn = '{}/test_origin.json'.format(data_dir)
     elif task == 'summarize':
         data_dir = '{}/{}/{}'.format(data_root, task, sub_task)
         train_fn = '{}/train.jsonl'.format(data_dir)

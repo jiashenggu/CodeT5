@@ -45,6 +45,28 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+def check_result(expr, code):
+
+    expr = expr.replace('1st', '1').replace('2nd', '2').replace('3rd', '3').replace('4th', '4').replace(
+        '5th', '5').replace('6th', '6').replace('7th', '7').replace('8th', '8').replace('10th', '10').replace('1()', '1').replace('80th', '80')
+
+
+    expr_lower = expr.lower().replace(' ', '')
+    code_compare = code.lower().replace(' ', '').replace('\n', '')
+
+    result = code_compare == expr_lower
+
+    if not result:
+        if 'start()' in code_compare:
+            if (code_compare.replace('start()', 'position(before(linetoken()),all())')) == expr_lower:
+                result = True
+            elif (code_compare.replace('start()', 'position(before(string()),all())')) == expr_lower:
+                result = True
+    res = 0
+    if result:
+        res = 1
+
+    return res
 
 def eval_ppl_epoch(args, eval_data, eval_examples, model, tokenizer):
     eval_sampler = SequentialSampler(eval_data)
@@ -133,7 +155,8 @@ def eval_bleu_epoch(args, eval_data, eval_examples, model, tokenizer, split_tag,
         dev_accs, predictions = [], []
         with open(output_fn, 'w') as f, open(gold_fn, 'w') as f1, open(src_fn, 'w') as f2:
             for pred_nl, gold in zip(pred_nls, eval_examples):
-                dev_accs.append(pred_nl.strip() == gold.target.strip())
+                # dev_accs.append(pred_nl.strip() == gold.target.strip())
+                dev_accs.append(check_result(pred_nl.strip(), gold.target.strip()))
                 if args.task in ['summarize']:
                     # for smooth-bleu4 evaluation
                     predictions.append(str(gold.idx) + '\t' + pred_nl)

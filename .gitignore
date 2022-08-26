@@ -1,2 +1,5 @@
-data
 __pycache__
+sh/results
+sh/saved_models
+sh/tensorboard
+.ipynb_checkpoints
