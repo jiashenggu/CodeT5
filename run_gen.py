@@ -263,7 +263,7 @@ def main():
                 if args.gradient_accumulation_steps > 1:
                     loss = loss / args.gradient_accumulation_steps
                 tr_loss += loss.item()
-                tb_writer.add_scalar('train_loss', loss, cur_epoch)
+                
                 nb_tr_examples += source_ids.size(0)
                 nb_tr_steps += 1
                 loss.backward()
@@ -275,6 +275,7 @@ def main():
                     scheduler.step()
                     global_step += 1
                     train_loss = round(tr_loss * args.gradient_accumulation_steps / (nb_tr_steps + 1), 4)
+                    tb_writer.add_scalar('train_loss', train_loss, cur_epoch)
                     bar.set_description("[{}] Train loss {}".format(cur_epoch, round(train_loss, 3)))
 
             if args.do_eval:
