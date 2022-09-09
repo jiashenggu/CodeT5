@@ -1,4 +1,4 @@
-WORKDIR="/home/gujiashe/CodeT5/"
+WORKDIR="/home/tmp00049/CodeT5"
 export PYTHONPATH=$WORKDIR
 
 TASK=${1}
@@ -16,9 +16,9 @@ WARMUP=${12}
 MODEL_DIR=${13}
 SUMMARY_DIR=${14}
 RES_FN=${15}
-
+L2=0
 if [[ $DATA_NUM == -1 ]]; then
-  DATA_TAG='all'
+  DATA_TAG='TextEditing_hisyn_min'
 else
   DATA_TAG=$DATA_NUM
   EPOCH=1
@@ -86,7 +86,7 @@ CUDA_VISIBLE_DEVICES=${GPU} \
   python ${RUN_FN}  ${MULTI_TASK_AUG}   \
   --do_train --do_eval --do_eval_bleu --do_test  \
   --task ${TASK} --sub_task ${SUB_TASK} --model_type ${MODEL_TYPE} --data_num ${DATA_NUM}  \
-  --num_train_epochs ${EPOCH} --warmup_steps ${WARMUP} --learning_rate ${LR}e-5 --patience ${PATIENCE} \
+  --num_train_epochs ${EPOCH} --warmup_steps ${WARMUP} --learning_rate ${LR}e-5 --patience ${PATIENCE} --weight_decay ${L2}e-5 \
   --tokenizer_name=${TOKENIZER}  --model_name_or_path=${MODEL_PATH} --data_dir ${WORKDIR}/data  \
   --cache_path ${CACHE_DIR}  --output_dir ${OUTPUT_DIR}  --summary_dir ${SUMMARY_DIR} \
   --save_last_checkpoints --always_save_model --res_dir ${RES_DIR} --res_fn ${RES_FN} \

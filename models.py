@@ -24,6 +24,7 @@ def build_or_load_gen_model(args):
     config_class, model_class, tokenizer_class = MODEL_CLASSES[args.model_type]
     config = config_class.from_pretrained(args.config_name if args.config_name else args.model_name_or_path)
     tokenizer = tokenizer_class.from_pretrained(args.tokenizer_name)
+    # config.dropout_rate = 0.2
     if args.model_type == 'roberta':
         encoder = model_class.from_pretrained(args.model_name_or_path, config=config)
         decoder_layer = nn.TransformerDecoderLayer(d_model=config.hidden_size, nhead=config.num_attention_heads)

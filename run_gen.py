@@ -98,7 +98,7 @@ def eval_ppl_epoch(args, eval_data, eval_examples, model, tokenizer):
         batch_num += 1
     eval_loss = eval_loss / batch_num
     eval_ppl = round(np.exp(eval_loss), 5)
-    return eval_ppl
+    return eval_ppl, eval_loss
 
 
 def eval_bleu_epoch(args, eval_data, eval_examples, model, tokenizer, split_tag, criteria):
@@ -263,7 +263,7 @@ def main():
                 if args.gradient_accumulation_steps > 1:
                     loss = loss / args.gradient_accumulation_steps
                 tr_loss += loss.item()
-
+                tb_writer.add_scalar('train_loss', loss, cur_epoch)
                 nb_tr_examples += source_ids.size(0)
                 nb_tr_steps += 1
                 loss.backward()
@@ -285,7 +285,8 @@ def main():
                     eval_examples, eval_data = load_and_cache_gen_data(args, args.dev_filename, pool, tokenizer, 'dev')
                     dev_dataset['dev_loss'] = eval_examples, eval_data
 
-                eval_ppl = eval_ppl_epoch(args, eval_data, eval_examples, model, tokenizer)
+                eval_ppl, eval_loss = eval_ppl_epoch(args, eval_data, eval_examples, model, tokenizer)
+                tb_writer.add_scalar('eval_loss', eval_loss, cur_epoch)
                 result = {'epoch': cur_epoch, 'global_step': global_step, 'eval_ppl': eval_ppl}
                 for key in sorted(result.keys()):
                     logger.info("  %s = %s", key, str(result[key]))
